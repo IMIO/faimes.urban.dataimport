@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<layers>
+  <layer
+      name="faimes.urban.dataimport"
+      interface="faimes.urban.dataimport.interfaces.IFaimesUrbanDataimportLayer"
+  />
+</layers>

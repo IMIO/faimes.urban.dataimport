@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<import-steps>
+
+ <import-step
+    id="faimes.urban.dataimport-faimesUrbawebImport"
+    handler="faimes.urban.dataimport.importer.importFaimesUrbaweb"
+    title="Urbaweb import for Faimes"
+    version="2013-01-04T11:30:41.455297">
+  Urbaweb import for Faimes
+ </import-step>
+
+</import-steps>
