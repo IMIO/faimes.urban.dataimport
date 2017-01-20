@@ -1146,6 +1146,8 @@ class DocumentFileMapper(Mapper):
             doc = open(document_path, 'rb')
         except:
             print "COULD NOT FIND DOCUMENT {}".format(document_path)
+            with open("documentnotfound.csv", "a") as file:
+                file.write(document_path + "\n")
             raise NoObjectToCreateException
         doc_content = doc.read()
         doc.close()
