@@ -54,6 +54,13 @@ class PortalTypeMapper(Mapper):
         return foldercategory
 
 
+class LicenceSubjectMapper(Mapper):
+    def mapLicencesubject(self, line):
+        object1 = self.getData('Genre de Travaux')
+        object2 = self.getData('Divers')
+        return '%s %s' % (object1, object2)
+
+
 class WorklocationMapper(Mapper):
     def mapWorklocations(self, line):
         num = self.getData('num')
@@ -157,13 +164,16 @@ class TechnicalConditionsMapper(Mapper):
 
 class ArchitectMapper(PostCreationMapper):
     def mapArchitects(self, line, plone_object):
-        archi_name = self.getData('NomArchitecte')
+        archi_name = self.getData('Architecte')
         fullname = cleanAndSplitWord(archi_name)
         if not fullname:
             return []
         noisy_words = ['monsieur', 'madame', 'architecte', '&', ',', '.', 'or', 'mr', 'mme', '/']
         name_keywords = [word.lower() for word in fullname if word.lower() not in noisy_words]
         architects = self.catalog(portal_type='Architect', Title=name_keywords)
+        if len(architects) == 0:
+            Utils.createArchitect(archi_name)
+            architects = self.catalog(portal_type='Architect', Title=name_keywords)
         if len(architects) == 1:
             return architects[0].getObject()
         self.logError(self, line, 'No architects found or too much architects found',
@@ -291,7 +301,7 @@ class ContactFactory(BaseFactory):
 
 class ContactIdMapper(Mapper):
     def mapId(self, line):
-        name = '%s%s' % (self.getData('D_Nom'), self.getData('D_Prenom'))
+        name = '%s%s' % (self.getData('Nom'), self.getData('ref'))
         name = name.replace(' ', '').replace('-', '')
         return normalizeString(self.site.portal_urban.generateUniqueId(name))
 
@@ -751,3 +761,17 @@ class Utils():
             except UnicodeDecodeError:
                 import ipdb; ipdb.set_trace() # TODO REMOVE BREAKPOINT
         return data
+
+    @staticmethod
+    def createArchitect(name):
+
+        idArchitect = idnormalizer.normalize(name + 'Architect').replace(" ", "")
+        containerArchitects = api.content.get(path='/urban/architects')
+
+        if idArchitect not in containerArchitects.objectIds():
+            new_id = idArchitect
+            new_name1 = name
+
+            if not (new_id in containerArchitects.objectIds()):
+                    object_id = containerArchitects.invokeFactory('Architect', id=new_id,
+                                                        name1=new_name1)

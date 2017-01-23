@@ -1,10 +1,11 @@
 from faimes.urban.dataimport.csv.mappers import *
+from faimes.urban.dataimport.licences.mappers import ReferenceMapper
 from imio.urban.dataimport.mapper import SimpleMapper
 
 OBJECTS_NESTING = [
     (
         'LICENCE', [
-            # ('CONTACT', []),
+            ('CONTACT', []),
             ('PARCEL', []),
             # ('DEPOSIT EVENT 1', []),
             # ('DECISION EVENT', []),
@@ -24,10 +25,6 @@ FIELDS_MAPPINGS = {
                     'from': 'ref',
                     'to': 'referenceDGATLP',
                 },
-                {
-                    'from': 'Divers',
-                    'to': 'licenceSubject',
-                },
             ),
 
             IdMapper: {
@@ -40,15 +37,21 @@ FIELDS_MAPPINGS = {
                 'to': ('portal_type', 'folderCategory',)
             },
 
-            # ReferenceMapper: {
-            #     'from': 'Numero',
-            #     'to': 'reference',
-            # },
+            LicenceSubjectMapper: {
+                'from': ('Genre de Travaux', 'Divers'),
+                'to': 'licenceSubject',
+            },
 
             WorklocationMapper: {
                 'from': ('Adresse', 'num'),
                 'to': 'workLocations',
             },
+
+           ArchitectMapper: {
+               'allowed_containers': ['BuildLicence'],
+               'from': ('Architecte',),
+               'to': ('architects',)
+           },
 
             # WorkTypeMapper: {
             #     'allowed_containers': ['BuildLicence', 'ParcelOutLicence'],
@@ -89,12 +92,6 @@ FIELDS_MAPPINGS = {
             #     'from': ('memo_Autorisation', 'memo_Autorisation2'),
             #     'to': 'locationTechnicalConditions',
             # },
-
-#            ArchitectMapper: {
-#                'allowed_containers': ['BuildLicence'],
-#                'from': ('NomArchitecte',),
-#                'to': ('architects',)
-#            },
 
 #            GeometricianMapper: {
 #                'allowed_containers': ['ParcelOutLicence'],
@@ -175,4 +172,31 @@ FIELDS_MAPPINGS = {
             },
         },
     },
+
+    'CONTACT':
+        {
+            'factory': [ContactFactory],
+
+            'mappers': {
+                SimpleMapper: (
+                    {
+                        'from': 'Nom',
+                        'to': 'name1',
+                    },
+                    {
+                        'from': ('num'),
+                        'to': 'number',
+                    },
+                    {
+                        'from': ('Adresse'),
+                        'to': 'street',
+                    },
+                ),
+
+                ContactIdMapper: {
+                    'from': ('Nom', 'ref'),
+                    'to': 'id',
+                },
+            },
+        },
 }
