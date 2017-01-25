@@ -25,7 +25,7 @@ class FaimesCsvImporterFromImportSettings(CSVImporterFromImportSettings):
         settings = super(FaimesCsvImporterFromImportSettings, self).get_importer_settings()
         db_settings = {
             'key_column': 'ref',
-            'csv_filename': '2004.csv',
+            'csv_filename': 'faimes.csv',
         }
 
         settings.update(db_settings)

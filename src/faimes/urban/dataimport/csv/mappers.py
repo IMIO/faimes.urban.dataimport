@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import unicodedata
 
+import datetime
+
 from imio.urban.dataimport.config import IMPORT_FOLDER_PATH
 
 from imio.urban.dataimport.exceptions import NoObjectToCreateException
@@ -41,7 +43,7 @@ class LicenceFactory(BaseFactory):
 
 class IdMapper(Mapper):
     def mapId(self, line):
-        return normalizeString(self.getData('ref'))
+        return normalizeString(self.getData('id'))
 
 
 class PortalTypeMapper(Mapper):
@@ -428,13 +430,14 @@ class ParcelDataMapper(Mapper):
     def map(self, line, **kwargs):
         section = self.getData('Sect', line).upper()
         division_map = self.getValueMapping('division_map')
-        division = division_map.get(self.getData('Div', line))
-
+        division = division_map.get((self.getData('Div', line)).strip())
         remaining_reference = self.getData('num parcelle', line)
         if not remaining_reference:
             return []
 
         abbreviations = identify_parcel_abbreviations(remaining_reference)
+        if not division or not section or division == 'NA' or section == 'NA':
+            return []
         base_reference = parse_cadastral_reference(division + section + abbreviations[0])
 
         base_reference = CadastralReference(*base_reference)
@@ -669,11 +672,7 @@ class DecisionEventIdMapper(Mapper):
 
 class DecisionEventDateMapper(Mapper):
     def mapDecisiondate(self, line):
-        autorisa = self.getData('Autorisa')
-        refus = self.getData('Refus')
-        tutAutorisa = self.getData('TutAutorisa')
-        tutRefus = self.getData('TutRefus')
-        date = autorisa or refus or tutAutorisa or tutRefus
+        date = self.getData('date permis')
         if not date:
             self.logError(self, line, 'No decision date found')
             raise NoObjectToCreateException
@@ -682,16 +681,14 @@ class DecisionEventDateMapper(Mapper):
 
 class DecisionEventDecisionMapper(Mapper):
     def mapDecision(self, line):
-        autorisa = self.getData('Autorisa')
-        refus = self.getData('Refus')
-        tutAutorisa = self.getData('TutAutorisa')
-        tutRefus = self.getData('TutRefus')
-        if autorisa or tutAutorisa:
-            return 'favorable'
-        elif refus or tutRefus:
+        date = self.getData('date permis')
+        if not date:
             return 'defavorable'
-        #error
-        raise NoObjectToCreateException
+        try:
+            datetime.datetime.strptime(date, "%d/%m/%y")
+            return 'favorable'
+        except ValueError:
+            return 'defavorable'
 
 
 class DecisionEventTitleMapper(Mapper):
@@ -712,8 +709,11 @@ class DecisionEventTitleMapper(Mapper):
 
 class DecisionEventNotificationDateMapper(Mapper):
     def mapEventdate(self, line):
-        eventDate = self.getData('Notifica')
-        return eventDate
+        eventDate = self.getData('date permis')
+        if eventDate:
+            return eventDate
+        else:
+            raise NoObjectToCreateException
 
 #
 # UrbanEvent suspension

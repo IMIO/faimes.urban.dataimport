@@ -12,4 +12,17 @@ VALUES_MAPS = {
         'V': '5',
         'VI': '6',
     },
+
+    'eventtype_id_map': table({
+        'header'             : ['decision_event'],
+        'BuildLicence'       : ['delivrance-du-permis-octroi-ou-refus'],
+        'ParcelOutLicence'   : ['delivrance-du-permis-octroi-ou-refus'],
+        'Declaration'        : ['deliberation-college'],
+        'UrbanCertificateOne': ['octroi-cu1'],
+        'UrbanCertificateTwo': ['octroi-cu2'],
+        'MiscDemand'         : ['deliberation-college'],
+        'EnvClassOne'        : ['decision'],
+        'EnvClassTwo'        : ['desision'],
+        'EnvClassThree'      : ['acceptation-de-la-demande'],
+    }),
 }

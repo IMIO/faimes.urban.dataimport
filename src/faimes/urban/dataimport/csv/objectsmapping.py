@@ -8,7 +8,7 @@ OBJECTS_NESTING = [
             ('CONTACT', []),
             ('PARCEL', []),
             # ('DEPOSIT EVENT 1', []),
-            # ('DECISION EVENT', []),
+            ('DECISION EVENT', []),
             # ('DOCUMENTS', []),
         ],
     ),
@@ -28,7 +28,7 @@ FIELDS_MAPPINGS = {
             ),
 
             IdMapper: {
-                'from': 'ref',
+                'from': 'id',
                 'to': 'id',
             },
 
@@ -174,29 +174,61 @@ FIELDS_MAPPINGS = {
     },
 
     'CONTACT':
-        {
-            'factory': [ContactFactory],
+    {
+        'factory': [ContactFactory],
 
-            'mappers': {
-                SimpleMapper: (
-                    {
-                        'from': 'Nom',
-                        'to': 'name1',
-                    },
-                    {
-                        'from': ('num'),
-                        'to': 'number',
-                    },
-                    {
-                        'from': ('Adresse'),
-                        'to': 'street',
-                    },
-                ),
-
-                ContactIdMapper: {
-                    'from': ('Nom', 'ref'),
-                    'to': 'id',
+        'mappers': {
+            SimpleMapper: (
+                {
+                    'from': 'Nom',
+                    'to': 'name1',
                 },
+                {
+                    'from': ('num'),
+                    'to': 'number',
+                },
+                {
+                    'from': ('Adresse'),
+                    'to': 'street',
+                },
+            ),
+
+            ContactIdMapper: {
+                'from': ('Nom', 'ref'),
+                'to': 'id',
             },
         },
+    },
+
+    'DECISION EVENT':
+    {
+        'factory': [UrbanEventFactory],
+
+        'mappers': {
+            DecisionEventTypeMapper: {
+                'from': (),
+                'to': 'eventtype',
+            },
+
+            DecisionEventIdMapper: {
+                'from': (),
+                'to': 'id',
+            },
+
+            DecisionEventDateMapper: {
+                'from': 'date permis',
+                'to': 'decisionDate',
+            },
+
+            DecisionEventDecisionMapper: {
+                'from': 'date permis',
+                'to': 'decision',
+            },
+
+            DecisionEventNotificationDateMapper: {
+                'from': 'date permis',
+                'to': 'eventDate',
+            }
+        },
+    },
 }
