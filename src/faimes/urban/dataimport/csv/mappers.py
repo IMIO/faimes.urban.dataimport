@@ -244,12 +244,23 @@ class CompletionStateMapper(PostCreationMapper):
     def map(self, line, plone_object):
         self.line = line
         state = ''
-        if self.getData('Autorisa') or self.getData('TutAutorisa'):
-            state = 'accepted'
-        elif self.getData('Refus') or self.getData('TutRefus'):
-            state = 'refused'
-        else:
-            return
+        date = self.getData('date permis')
+        try:
+            datetime.datetime.strptime(date, "%d/%m/%Y")
+            state = 'accept'
+        except ValueError:
+            try:
+                datetime.datetime.strptime(date, "%d/%m/%y")
+                state = 'accept'
+            except ValueError:
+                pass
+
+        if state != 'accept':
+            if date == 'ABANDON':
+                state = 'retired'
+            else:
+                state = 'refused'
+
         workflow_tool = api.portal.get_tool('portal_workflow')
         workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
         workflow_id = workflow_def.getId()
@@ -683,12 +694,16 @@ class DecisionEventDecisionMapper(Mapper):
     def mapDecision(self, line):
         date = self.getData('date permis')
         if not date:
-            return 'defavorable'
+            return u'Défavorable'
         try:
             datetime.datetime.strptime(date, "%d/%m/%y")
-            return 'favorable'
+            return 'Favorable'
         except ValueError:
-            return 'defavorable'
+            try:
+                datetime.datetime.strptime(date, "%d/%m/%Y")
+                return 'Favorable'
+            except ValueError:
+                return u'Défavorable'
 
 
 class DecisionEventTitleMapper(Mapper):

@@ -149,10 +149,10 @@ FIELDS_MAPPINGS = {
             #     'to': 'description',
             # },
             #
-            # CompletionStateMapper: {
-            #     'from': ('Autorisa', 'Refus', 'TutAutorisa', 'TutRefus'),
-            #     'to': (),  # <- no field to fill, its the workflow state that has to be changed
-            # },
+            CompletionStateMapper: {
+                'from': 'date permis',
+                'to': (),  # <- no field to fill, its the workflow state that has to be changed
+            },
 
             ErrorsMapper: {
                 'from': (),
