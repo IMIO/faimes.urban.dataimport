@@ -73,7 +73,7 @@ FIELDS_MAPPINGS = {
             },
 
             ReferenceMapper: {
-                'from': 'Numero',
+                'from': ('Numero','Rec'),
                 'to': 'reference',
             },
 
@@ -118,7 +118,7 @@ FIELDS_MAPPINGS = {
                 'KEYS': ('Cle_Urba', 'Cle_Serv'),
                 'mappers': {
                     AskOpinionsMapper: {
-                        'from': ('Org1', 'Org3', 'Org4', 'Org5', 'Org6', 'Org7', 'Org8', 'Org9', 'Org10'),
+                        'from': ('Org1', 'Org2', 'Org3', 'Org4', 'Org5', 'Org6', 'Org7', 'Org8', 'Org9', 'Org10'),
                         'to': 'solicitOpinionsTo',
                     }
                 }
