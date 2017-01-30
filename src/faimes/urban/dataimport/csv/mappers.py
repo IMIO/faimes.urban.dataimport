@@ -243,30 +243,27 @@ class EnvRubricsMapper(Mapper):
 class CompletionStateMapper(PostCreationMapper):
     def map(self, line, plone_object):
         self.line = line
-        state = ''
+        transition = ''
         date = self.getData('date permis')
         try:
             datetime.datetime.strptime(date, "%d/%m/%Y")
-            state = 'accept'
+            transition = 'accept'
         except ValueError:
             try:
                 datetime.datetime.strptime(date, "%d/%m/%y")
-                state = 'accept'
+                transition = 'accept'
             except ValueError:
                 pass
 
-        if state != 'accept':
+        if transition != 'accept':
             if date == 'ABANDON':
-                state = 'retired'
+                transition = 'retire'
             else:
-                state = 'refused'
+                transition = 'refuse'
 
-        workflow_tool = api.portal.get_tool('portal_workflow')
-        workflow_def = workflow_tool.getWorkflowsFor(plone_object)[0]
-        workflow_id = workflow_def.getId()
-        workflow_state = workflow_tool.getStatusOf(workflow_id, plone_object)
-        workflow_state['review_state'] = state
-        workflow_tool.setStatusOf(workflow_id, plone_object, workflow_state.copy())
+        if transition:
+            api.content.transition(plone_object, transition)
+            # api.content.transition(plone_object, 'nonapplicable')
 
 
 class ErrorsMapper(FinalMapper):
