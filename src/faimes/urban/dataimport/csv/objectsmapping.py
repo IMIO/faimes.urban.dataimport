@@ -27,6 +27,11 @@ FIELDS_MAPPINGS = {
                 },
             ),
 
+            ReferenceMapper: {
+                'from': ('ref', 'Nom'),
+                'to': 'reference',
+            },
+
             IdMapper: {
                 'from': 'id',
                 'to': 'id',

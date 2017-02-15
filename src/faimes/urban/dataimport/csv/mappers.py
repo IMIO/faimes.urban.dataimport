@@ -41,6 +41,13 @@ class LicenceFactory(BaseFactory):
 # mappers
 
 
+class ReferenceMapper(Mapper):
+    def mapReference(self, line):
+        object1 = self.getData('ref')
+        object2 = self.getData('Nom')
+        return '%s %s' % (object1, object2)
+
+
 class IdMapper(Mapper):
     def mapId(self, line):
         return normalizeString(self.getData('id'))
