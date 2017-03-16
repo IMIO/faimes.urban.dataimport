@@ -6,13 +6,13 @@ from faimes.urban.dataimport.licences import objectsmapping
 from faimes.urban.dataimport.licences import valuesmapping
 from imio.urban.dataimport.mapping import ObjectsMapping, ValuesMapping
 from imio.urban.dataimport.urbaweb.importer import UrbawebDataImporter
-from faimes.urban.dataimport.interfaces import IFaimesDataImporter
+from faimes.urban.dataimport.licences.interfaces import IFaimesDataImporter
 
 
-class FaimesDataImporter(UrbawebDataImporter):
-    """ """
-
-    implements(IFaimesDataImporter)
+# class FaimesDataImporter(UrbawebDataImporter):
+#     """ """
+#
+#     implements(IFaimesDataImporter)
 
 
 class LicencesMapping(ObjectsMapping):

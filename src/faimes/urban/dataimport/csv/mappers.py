@@ -446,14 +446,15 @@ class ParcelDataMapper(Mapper):
         section = self.getData('Sect', line).upper()
         division_map = self.getValueMapping('division_map')
         division = division_map.get((self.getData('Div', line)).strip())
+        division_code_map = self.getValueMapping('division_code_map')
+        division_code = division_code_map.get(division)
         remaining_reference = self.getData('num parcelle', line)
         if not remaining_reference:
             return []
-
         abbreviations = identify_parcel_abbreviations(remaining_reference)
-        if not division or not section or division == 'NA' or section == 'NA':
+        if not division_code or not section or division_code == 'NA' or section == 'NA':
             return []
-        base_reference = parse_cadastral_reference(division + section + abbreviations[0])
+        base_reference = parse_cadastral_reference(division_code + section + abbreviations[0])
 
         base_reference = CadastralReference(*base_reference)
 

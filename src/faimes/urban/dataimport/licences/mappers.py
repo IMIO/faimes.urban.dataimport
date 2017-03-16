@@ -571,7 +571,7 @@ class ParcelDataMapper(SubQueryMapper):
     def getDivision(self, line):
         key_value = self.getData('Division', line)
         if key_value:
-            db_query = "Select Num_D from DIVISIONS Where CLEF = '%s'" % key_value
+            db_query = "Select Num_D from DIVISIONS Where Division = '%s'" % key_value
             division = self._query(db_query).next()[0]
         else:
             raise NoObjectToCreateException
@@ -1082,31 +1082,31 @@ class SuspensionEventFactory(UrbanEventFactory):
 #mappers
 
 
-class SuspensionsMapper(MultiLinesSecondaryTableMapper):
-    """ """
-
-
-class SuspensionEventTypeMapper(Mapper):
-    def mapEventtype(self, line):
-        licence = self.importer.current_containers_stack[-1]
-        eventtype_id = 'suspension-du-permis'
-        if not eventtype_id:
-            return
-
-        urban_tool = api.portal.get_tool('portal_urban')
-        config = urban_tool.getUrbanConfig(licence)
-        return getattr(config.urbaneventtypes, eventtype_id).UID()
-
-
-class SuspensionEventIdMapper(Mapper):
-    def mapId(self, line):
-        return self.site.portal_urban.generateUniqueId('suspension')
-
-
-class SuspensionEventReasonMapper(Mapper):
-    def mapSuspensionreason(self, line):
-        reason = '<p>{}</p>'.format(self.getData('Motif'))
-        return reason
+# class SuspensionsMapper(MultiLinesSecondaryTableMapper):
+#     """ """
+#
+#
+# class SuspensionEventTypeMapper(Mapper):
+#     def mapEventtype(self, line):
+#         licence = self.importer.current_containers_stack[-1]
+#         eventtype_id = 'suspension-du-permis'
+#         if not eventtype_id:
+#             return
+#
+#         urban_tool = api.portal.get_tool('portal_urban')
+#         config = urban_tool.getUrbanConfig(licence)
+#         return getattr(config.urbaneventtypes, eventtype_id).UID()
+#
+#
+# class SuspensionEventIdMapper(Mapper):
+#     def mapId(self, line):
+#         return self.site.portal_urban.generateUniqueId('suspension')
+#
+#
+# class SuspensionEventReasonMapper(Mapper):
+#     def mapSuspensionreason(self, line):
+#         reason = '<p>{}</p>'.format(self.getData('Motif'))
+#         return reason
 
 #
 # Documents

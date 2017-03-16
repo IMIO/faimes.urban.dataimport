@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from imio.urban.dataimport.access.interfaces import IAccessImporter
 
 from plone.theme.interfaces import IDefaultPloneLayer
 
+from imio.urban.dataimport.urbaweb.interfaces import IUrbawebDataImporter
 
-class IFaimesDataImporter(IAccessImporter):
+
+class IFaimesDataImporter(IUrbawebDataImporter):
     """ marker interface for Faimes Agorawin importer """
 
 

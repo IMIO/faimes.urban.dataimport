@@ -1,5 +1,4 @@
 from faimes.urban.dataimport.csv.mappers import *
-from faimes.urban.dataimport.licences.mappers import ReferenceMapper
 from imio.urban.dataimport.mapper import SimpleMapper
 
 OBJECTS_NESTING = [

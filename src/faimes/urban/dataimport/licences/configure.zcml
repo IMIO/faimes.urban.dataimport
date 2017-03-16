@@ -4,14 +4,14 @@
     i18n_domain="faimes.urban.dataimport">
 
     <adapter
-        for="faimes.urban.dataimport.interfaces.IFaimesDataImporter"
+        for="imio.urban.dataimport.urbaweb.interfaces.IUrbawebDataImporter"
         factory=".importer.LicencesMapping"
         provides="imio.urban.dataimport.interfaces.IObjectsMapping"
         name="objects mapping"
         />
 
     <adapter
-        for="faimes.urban.dataimport.interfaces.IFaimesDataImporter"
+        for="imio.urban.dataimport.urbaweb.interfaces.IUrbawebDataImporter"
         factory=".importer.LicencesValuesMapping"
         provides="imio.urban.dataimport.interfaces.IValuesMapping"
         name="values mapping"
